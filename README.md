@@ -1,73 +1,125 @@
-# React + TypeScript + Vite
+# SelectX Admin App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dashboard administrativo para gerenciamento de propriedades imobiliárias, leads, cidades, bairros e usuários.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript**
+- **Vite** - Build tool
+- **Supabase** - Backend (PostgreSQL + Auth)
+- **React Router** - Roteamento
+- **Lucide React** - Ícones
+- **CSS Modules** - Estilização
 
-## React Compiler
+## 📋 Pré-requisitos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 18+
+- Yarn ou npm
+- Conta no Supabase com projeto configurado
 
-## Expanding the ESLint configuration
+## ⚙️ Configuração
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone o repositório
+2. Instale as dependências:
+```bash
+yarn install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3. Configure as variáveis de ambiente no arquivo `.env`:
+```env
+VITE_SUPABASE_URL=sua_url_do_supabase
+VITE_SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
 ```
+
+4. Inicie o servidor de desenvolvimento:
+```bash
+yarn dev
+```
+
+## 🔐 Autenticação
+
+O sistema utiliza autenticação do Supabase. Você precisa ter um usuário criado no sistema de autenticação do Supabase para fazer login.
+
+**Nota:** Não há página de registro. Os usuários devem ser criados diretamente no painel do Supabase ou via API.
+
+## 📊 Funcionalidades
+
+### Dashboard
+- Visão geral com estatísticas do sistema
+- Cards informativos com contadores
+
+### Propriedades
+- Listagem de todas as propriedades
+- Criação, edição e exclusão
+- Campos completos conforme schema do banco
+
+### Leads
+- Gerenciamento de leads de clientes
+- Vinculação com propriedades
+- Status de acompanhamento
+
+### Cidades
+- Cadastro de cidades
+- Gerenciamento de estados (UF)
+
+### Bairros
+- Cadastro de bairros
+- Vinculação com cidades
+
+### Usuários (Profiles)
+- Gerenciamento de perfis de usuários
+- Controle de papéis (admin, agent, viewer)
+
+## 🗄️ Schema do Banco de Dados
+
+O projeto está integrado com o Supabase e utiliza o schema documentado em `docs/database.md`.
+
+### Tabelas Principais:
+- `properties` - Propriedades imobiliárias
+- `leads` - Leads de clientes
+- `cities` - Cidades
+- `neighborhoods` - Bairros
+- `profiles` - Perfis de usuários
+
+## 🏗️ Estrutura do Projeto
+
+```
+src/
+├── components/        # Componentes reutilizáveis
+│   ├── Layout/       # Layout principal (Sidebar, Header)
+│   └── UI/           # Componentes de UI (Button, Card, Table, etc)
+├── contexts/         # Contextos React (Auth)
+├── hooks/            # Custom hooks (useProperties, useCities, etc)
+├── lib/              # Configurações (Supabase client)
+├── pages/            # Páginas da aplicação
+├── types/            # Tipos TypeScript
+└── App.tsx           # Componente principal
+```
+
+## 🔧 Scripts Disponíveis
+
+- `yarn dev` - Inicia servidor de desenvolvimento
+- `yarn build` - Build para produção
+- `yarn preview` - Preview do build de produção
+- `yarn lint` - Executa o linter
+
+## 📝 Notas Importantes
+
+1. **Perfis de Usuários**: Para criar um novo perfil, é necessário ter o ID do usuário do sistema de autenticação do Supabase (auth.users).
+
+2. **RLS (Row Level Security)**: A tabela `profiles` possui RLS habilitado. Certifique-se de configurar as políticas adequadas no Supabase.
+
+3. **Variáveis de Ambiente**: As variáveis devem começar com `VITE_` para serem acessíveis no código do Vite.
+
+## 🎨 Design
+
+O dashboard possui um design moderno e clean com:
+- Sidebar fixa com navegação
+- Header com informações do usuário
+- Cards e tabelas responsivas
+- Modais para formulários
+- Sistema de cores consistente
+
+## 📄 Licença
+
+Este projeto é privado.
