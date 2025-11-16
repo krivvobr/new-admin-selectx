@@ -4,6 +4,7 @@ import Button from '../components/UI/Button';
 import Table from '../components/UI/Table';
 import Modal from '../components/UI/Modal';
 import Input from '../components/UI/Input';
+import { Plus } from 'lucide-react';
 import './Cities.css';
 
 interface City {
@@ -41,7 +42,10 @@ export default function Cities() {
           <h1 className="page-title">Cidades</h1>
           <p className="page-subtitle">Gerencie as cidades disponíveis</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>+ Nova Cidade</Button>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus size={18} />
+          Nova Cidade
+        </Button>
       </div>
 
       <Card>

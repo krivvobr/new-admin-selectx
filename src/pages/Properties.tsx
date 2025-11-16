@@ -6,6 +6,7 @@ import Modal from '../components/UI/Modal';
 import Input from '../components/UI/Input';
 import Select from '../components/UI/Select';
 import Textarea from '../components/UI/Textarea';
+import { Plus } from 'lucide-react';
 import './Properties.css';
 
 interface Property {
@@ -62,7 +63,10 @@ export default function Properties() {
           <h1 className="page-title">Propriedades</h1>
           <p className="page-subtitle">Gerencie todas as propriedades do sistema</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>+ Nova Propriedade</Button>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus size={18} />
+          Nova Propriedade
+        </Button>
       </div>
 
       <Card>

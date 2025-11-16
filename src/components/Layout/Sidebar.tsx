@@ -1,13 +1,21 @@
 import { Link, useLocation } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  Home,
+  Users,
+  MapPin,
+  Building2,
+  User,
+} from 'lucide-react';
 import './Sidebar.css';
 
 const menuItems = [
-  { path: '/', label: 'Dashboard', icon: '📊' },
-  { path: '/properties', label: 'Propriedades', icon: '🏠' },
-  { path: '/leads', label: 'Leads', icon: '👥' },
-  { path: '/cities', label: 'Cidades', icon: '🏙️' },
-  { path: '/neighborhoods', label: 'Bairros', icon: '📍' },
-  { path: '/profiles', label: 'Usuários', icon: '👤' },
+  { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/properties', label: 'Propriedades', icon: Home },
+  { path: '/leads', label: 'Leads', icon: Users },
+  { path: '/cities', label: 'Cidades', icon: Building2 },
+  { path: '/neighborhoods', label: 'Bairros', icon: MapPin },
+  { path: '/profiles', label: 'Usuários', icon: User },
 ];
 
 export default function Sidebar() {
@@ -20,16 +28,19 @@ export default function Sidebar() {
         <span className="sidebar-subtitle">Admin</span>
       </div>
       <nav className="sidebar-nav">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
-          >
-            <span className="sidebar-icon">{item.icon}</span>
-            <span className="sidebar-label">{item.label}</span>
-          </Link>
-        ))}
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
+            >
+              <Icon className="sidebar-icon" size={20} />
+              <span className="sidebar-label">{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
     </aside>
   );

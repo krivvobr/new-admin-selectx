@@ -6,6 +6,7 @@ import Modal from '../components/UI/Modal';
 import Input from '../components/UI/Input';
 import Select from '../components/UI/Select';
 import Textarea from '../components/UI/Textarea';
+import { Plus } from 'lucide-react';
 import './Leads.css';
 
 interface Lead {
@@ -47,7 +48,10 @@ export default function Leads() {
           <h1 className="page-title">Leads</h1>
           <p className="page-subtitle">Gerencie os leads de clientes</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>+ Novo Lead</Button>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus size={18} />
+          Novo Lead
+        </Button>
       </div>
 
       <Card>

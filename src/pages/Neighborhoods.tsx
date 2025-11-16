@@ -5,6 +5,7 @@ import Table from '../components/UI/Table';
 import Modal from '../components/UI/Modal';
 import Input from '../components/UI/Input';
 import Select from '../components/UI/Select';
+import { Plus } from 'lucide-react';
 import './Neighborhoods.css';
 
 interface Neighborhood {
@@ -44,7 +45,10 @@ export default function Neighborhoods() {
           <h1 className="page-title">Bairros</h1>
           <p className="page-subtitle">Gerencie os bairros por cidade</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>+ Novo Bairro</Button>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus size={18} />
+          Novo Bairro
+        </Button>
       </div>
 
       <Card>

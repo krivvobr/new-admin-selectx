@@ -5,6 +5,7 @@ import Table from '../components/UI/Table';
 import Modal from '../components/UI/Modal';
 import Input from '../components/UI/Input';
 import Select from '../components/UI/Select';
+import { Plus } from 'lucide-react';
 import './Profiles.css';
 
 interface Profile {
@@ -44,7 +45,10 @@ export default function Profiles() {
           <h1 className="page-title">Usuários</h1>
           <p className="page-subtitle">Gerencie os perfis de usuários</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>+ Novo Usuário</Button>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus size={18} />
+          Novo Usuário
+        </Button>
       </div>
 
       <Card>
