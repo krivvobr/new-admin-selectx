@@ -1,0 +1,173 @@
+.imagekit-upload-container {
+  width: 100%;
+}
+
+.imagekit-upload-area {
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f8fafc;
+}
+
+.imagekit-upload-area:hover {
+  border-color: #94a3b8;
+  background-color: #f1f5f9;
+}
+
+.imagekit-upload-area:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.imagekit-upload-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #64748b;
+}
+
+.imagekit-upload-text {
+  font-size: 14px;
+  color: #475569;
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.imagekit-upload-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.imagekit-upload-limit {
+  padding: 16px;
+  text-align: center;
+  background-color: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 14px;
+}
+
+.imagekit-upload-error {
+  padding: 16px;
+  text-align: center;
+  background-color: #fee2e2;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  color: #991b1b;
+  font-size: 14px;
+}
+
+.imagekit-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.imagekit-preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.imagekit-preview-item.cover-image {
+  border-color: #3b82f6;
+  border-width: 3px;
+}
+
+.imagekit-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imagekit-preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.imagekit-preview-item:hover .imagekit-preview-overlay {
+  opacity: 1;
+}
+
+.imagekit-cover-badge {
+  background-color: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.imagekit-preview-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.imagekit-action-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #475569;
+}
+
+.imagekit-action-btn:hover {
+  background-color: white;
+  transform: scale(1.1);
+}
+
+.imagekit-remove-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.imagekit-uploading {
+  margin-top: 16px;
+  padding: 12px;
+  text-align: center;
+  background-color: #dbeafe;
+  border: 1px solid #60a5fa;
+  border-radius: 8px;
+  color: #1e40af;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .imagekit-preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .imagekit-upload-area {
+    padding: 24px 16px;
+  }
+}
+

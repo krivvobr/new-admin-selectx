@@ -6,6 +6,7 @@ import Modal from '../components/UI/Modal';
 import Input from '../components/UI/Input';
 import Select from '../components/UI/Select';
 import Textarea from '../components/UI/Textarea';
+import ImageKitUpload from '../components/ImageKitUpload';
 import { useProperties } from '../hooks/useProperties';
 import { useCities } from '../hooks/useCities';
 import { Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
@@ -34,6 +35,7 @@ export default function Properties() {
     city_id: '',
     suites: '',
     cover_image: '',
+    images: [] as string[],
   });
 
   const { properties, loading, createProperty, updateProperty, deleteProperty } = useProperties();
@@ -219,6 +221,7 @@ export default function Properties() {
       city_id: '',
       suites: '',
       cover_image: '',
+      images: [],
     });
     setIsModalOpen(true);
   };
@@ -244,6 +247,7 @@ export default function Properties() {
       city_id: property.city_id || '',
       suites: property.suites?.toString() || '',
       cover_image: property.cover_image || '',
+      images: property.images || [],
     });
     setIsModalOpen(true);
   };
@@ -287,6 +291,7 @@ export default function Properties() {
       city_id: formData.city_id && formData.city_id !== '' ? formData.city_id : null,
       suites: formData.suites && formData.suites !== '' ? parseInt(formData.suites, 10) : null,
       cover_image: formData.cover_image?.trim() || null,
+      images: formData.images && formData.images.length > 0 ? formData.images : null,
     };
 
     try {
@@ -524,10 +529,26 @@ export default function Properties() {
             />
           </div>
 
+          <div className="form-row" style={{ flexDirection: 'column', gap: '16px' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500', color: '#334155' }}>
+                Imagens do Imóvel
+              </label>
+              <ImageKitUpload
+                images={formData.images}
+                onImagesChange={(images) => setFormData({ ...formData, images })}
+                minImages={0}
+                maxImages={20}
+                coverImage={formData.cover_image}
+                onCoverImageChange={(url) => setFormData({ ...formData, cover_image: url })}
+              />
+            </div>
+          </div>
+
           <div className="form-row">
             <Input
-              label="Imagem de Capa (URL)"
-              placeholder="https://..."
+              label="Imagem de Capa (URL Manual)"
+              placeholder="https://... (ou use o botão acima para definir)"
               value={formData.cover_image}
               onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
             />
