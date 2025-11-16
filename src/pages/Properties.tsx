@@ -8,7 +8,7 @@ import Select from '../components/UI/Select';
 import Textarea from '../components/UI/Textarea';
 import { useProperties } from '../hooks/useProperties';
 import { useCities } from '../hooks/useCities';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
 import type { Property, PropertyType, PropertyPurpose, PropertyStatus } from '../types';
 import './Properties.css';
 
@@ -93,10 +93,115 @@ export default function Properties() {
     },
   ];
 
+  const generateCode = (random = false) => {
+    // Busca todos os números de código existente
+    const codes = properties
+      .map((p) => p.code)
+      .filter((code) => /^SELCX\d+$/i.test(code))
+      .map((code) => {
+        const match = code.match(/\d+$/);
+        return match ? parseInt(match[0], 10) : 0;
+      });
+
+    const maxNumber = codes.length > 0 ? Math.max(...codes) : 0;
+
+    if (random) {
+      // Gera um número aleatório entre 1 e maxNumber + 100
+      // Garante que não seja um código já existente
+      let randomNumber;
+      let attempts = 0;
+      do {
+        randomNumber = Math.floor(Math.random() * (maxNumber + 100)) + 1;
+        attempts++;
+        // Se tentou muitas vezes, usa o próximo sequencial
+        if (attempts > 50) {
+          randomNumber = maxNumber + 1;
+          break;
+        }
+      } while (codes.includes(randomNumber));
+      
+      return `SELCX${randomNumber.toString().padStart(3, '0')}`;
+    } else {
+      // Gera o próximo número sequencial
+      const nextNumber = maxNumber + 1;
+      return `SELCX${nextNumber.toString().padStart(3, '0')}`;
+    }
+  };
+
+  const handleGenerateCode = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    // Gera um código aleatório ao clicar no botão
+    const newCode = generateCode(true);
+    setFormData((prev) => ({ ...prev, code: newCode }));
+  };
+
+  // Funções de máscara para valores monetários
+  const formatCurrency = (value: string | number | null | undefined): string => {
+    if (!value && value !== 0) return '';
+    const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d,.-]/g, '').replace(',', '.')) : value;
+    if (isNaN(numValue)) return '';
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(numValue);
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    // Remove tudo exceto números
+    const cleaned = inputValue.replace(/\D/g, '');
+    // Se estiver vazio, limpa o campo
+    if (!cleaned) {
+      setFormData({ ...formData, price: '' });
+      return;
+    }
+    // Converte para número (os dois últimos dígitos são centavos)
+    // Ex: 30000000 -> 300000.00
+    const numValue = parseFloat(cleaned) / 100;
+    if (!isNaN(numValue)) {
+      setFormData({ ...formData, price: numValue.toString() });
+    }
+  };
+
+  // Funções de máscara para área (m²)
+  const formatArea = (value: string | number | null | undefined): string => {
+    if (!value && value !== 0) return '';
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(numValue)) return '';
+    // Formata sem decimais se for número inteiro, caso contrário com até 2 decimais
+    const isInteger = numValue % 1 === 0;
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: isInteger ? 0 : 0,
+      maximumFractionDigits: isInteger ? 0 : 2,
+    }).format(numValue);
+  };
+
+  const handleAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    // Remove tudo exceto números
+    const cleaned = inputValue.replace(/\D/g, '');
+    // Se estiver vazio, limpa o campo
+    if (!cleaned) {
+      setFormData({ ...formData, area: '' });
+      return;
+    }
+    // Converte para número
+    const numValue = parseFloat(cleaned);
+    if (!isNaN(numValue)) {
+      setFormData({ ...formData, area: numValue.toString() });
+    }
+  };
+
   const handleOpenModal = () => {
     setEditingProperty(null);
+    const newCode = generateCode();
     setFormData({
-      code: '',
+      code: newCode,
       title: '',
       description: '',
       type: 'apartamento',
@@ -215,13 +320,55 @@ export default function Properties() {
       >
         <form className="form" onSubmit={handleSubmit}>
           <div className="form-row">
-            <Input
-              label="Código"
-              placeholder="Ex: PROP001"
-              value={formData.code}
-              onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-              required
-            />
+            <div style={{ flex: 1, position: 'relative' }}>
+              <Input
+                label="Código"
+                placeholder="Ex: SELCX001"
+                value={formData.code}
+                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                required
+                style={{ paddingRight: !editingProperty ? '45px' : undefined }}
+              />
+              {!editingProperty && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleGenerateCode();
+                  }}
+                  style={{
+                    position: 'absolute',
+                    right: '6px',
+                    top: '28px',
+                    padding: '6px',
+                    minWidth: 'auto',
+                    height: '32px',
+                    width: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 10,
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    borderRadius: '6px',
+                    color: '#64748b',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#f1f5f9';
+                    e.currentTarget.style.color = '#0f172a';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = '#64748b';
+                  }}
+                  title="Gerar código automaticamente"
+                >
+                  <RefreshCw size={16} />
+                </button>
+              )}
+            </div>
             <Input
               label="Título"
               placeholder="Título da propriedade"
@@ -260,11 +407,10 @@ export default function Properties() {
           <div className="form-row">
             <Input
               label="Preço"
-              type="number"
-              placeholder="0.00"
-              step="0.01"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+              type="text"
+              placeholder="R$ 0,00"
+              value={formData.price ? formatCurrency(formData.price) : ''}
+              onChange={handlePriceChange}
             />
             <Select
               label="Status"
@@ -295,10 +441,10 @@ export default function Properties() {
             />
             <Input
               label="Área (m²)"
-              type="number"
+              type="text"
               placeholder="0"
-              value={formData.area}
-              onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+              value={formData.area ? formatArea(formData.area) : ''}
+              onChange={handleAreaChange}
             />
           </div>
 
