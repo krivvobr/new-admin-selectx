@@ -5,7 +5,7 @@ import {
   Users,
   MapPin,
   Building2,
-  User,
+
 } from 'lucide-react';
 import './Sidebar.css';
 import logo from '/logo.png';
@@ -15,7 +15,7 @@ const menuItems = [
   { path: '/leads', label: 'Leads', icon: Users },
   { path: '/cities', label: 'Cidades', icon: Building2 },
   { path: '/neighborhoods', label: 'Bairros', icon: MapPin },
-  { path: '/profiles', label: 'Usuários', icon: User },
+  // { path: '/profiles', label: 'Usuários', icon: User },
 ];
 
 export default function Sidebar() {
