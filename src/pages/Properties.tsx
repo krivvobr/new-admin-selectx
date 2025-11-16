@@ -257,34 +257,57 @@ export default function Properties() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const propertyData: any = {
-      code: formData.code,
-      title: formData.title,
-      description: formData.description || null,
-      type: formData.type,
-      purpose: formData.purpose,
-      price: formData.price ? parseFloat(formData.price) : null,
-      address: formData.address || null,
-      area: formData.area ? parseFloat(formData.area) : null,
-      bedrooms: formData.bedrooms ? parseInt(formData.bedrooms) : null,
-      bathrooms: formData.bathrooms ? parseInt(formData.bathrooms) : null,
-      parking: formData.parking ? parseInt(formData.parking) : null,
-      furnished: formData.furnished,
-      financing: formData.financing,
-      floor: formData.floor ? parseInt(formData.floor) : null,
-      status: formData.status,
-      city_id: formData.city_id || null,
-      suites: formData.suites ? parseInt(formData.suites) : null,
-      cover_image: formData.cover_image || null,
-    };
-
-    if (editingProperty) {
-      await updateProperty(editingProperty.id, propertyData);
-    } else {
-      await createProperty(propertyData);
+    // Validação básica
+    if (!formData.code || !formData.code.trim()) {
+      alert('Por favor, preencha o código da propriedade.');
+      return;
     }
 
-    setIsModalOpen(false);
+    if (!formData.title || !formData.title.trim()) {
+      alert('Por favor, preencha o título da propriedade.');
+      return;
+    }
+
+    const propertyData: any = {
+      code: formData.code.trim(),
+      title: formData.title.trim(),
+      description: formData.description?.trim() || null,
+      type: formData.type,
+      purpose: formData.purpose,
+      price: formData.price && formData.price !== '' ? parseFloat(formData.price) : 0,
+      address: formData.address?.trim() || null,
+      area: formData.area && formData.area !== '' ? parseFloat(formData.area) : null,
+      bedrooms: formData.bedrooms && formData.bedrooms !== '' ? parseInt(formData.bedrooms, 10) : null,
+      bathrooms: formData.bathrooms && formData.bathrooms !== '' ? parseInt(formData.bathrooms, 10) : null,
+      parking: formData.parking && formData.parking !== '' ? parseInt(formData.parking, 10) : null,
+      furnished: formData.furnished,
+      financing: formData.financing,
+      floor: formData.floor && formData.floor !== '' ? parseInt(formData.floor, 10) : null,
+      status: formData.status,
+      city_id: formData.city_id && formData.city_id !== '' ? formData.city_id : null,
+      suites: formData.suites && formData.suites !== '' ? parseInt(formData.suites, 10) : null,
+      cover_image: formData.cover_image?.trim() || null,
+    };
+
+    try {
+      let result;
+      if (editingProperty) {
+        result = await updateProperty(editingProperty.id, propertyData);
+      } else {
+        result = await createProperty(propertyData);
+      }
+
+      if (result?.error) {
+        console.error('Erro ao salvar propriedade:', result.error);
+        alert(`Erro ao salvar propriedade: ${result.error}`);
+        return;
+      }
+
+      setIsModalOpen(false);
+    } catch (error: any) {
+      console.error('Erro ao salvar propriedade:', error);
+      alert(`Erro ao salvar propriedade: ${error.message || 'Erro desconhecido'}`);
+    }
   };
 
   if (loading) {
