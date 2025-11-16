@@ -8,7 +8,7 @@ import {
   User,
 } from 'lucide-react';
 import './Sidebar.css';
-
+import logo from '/logo.png';
 const menuItems = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/properties', label: 'Propriedades', icon: Home },
@@ -24,8 +24,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <h1 className="sidebar-logo">SelectX</h1>
-        <span className="sidebar-subtitle">Admin</span>
+        <img src={logo} alt="Logo" className="sidebar-logo" />
       </div>
       <nav className="sidebar-nav">
         {menuItems.map((item) => {
