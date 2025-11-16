@@ -1,0 +1,15 @@
+.badge-admin {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-agent {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-viewer {
+  background: #f3f4f6;
+  color: #374151;
+}
+

@@ -1,0 +1,12 @@
+.layout {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.main-content {
+  margin-left: 260px;
+  margin-top: 70px;
+  padding: 32px;
+  min-height: calc(100vh - 70px);
+}
+
