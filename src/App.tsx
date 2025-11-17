@@ -29,6 +29,7 @@ function App() {
             >
               <Route index element={<Dashboard />} />
               <Route path="properties" element={<Properties />} />
+              <Route path="imoveis" element={<Properties />} />
               <Route path="leads" element={<Leads />} />
               <Route path="cities" element={<Cities />} />
               <Route path="neighborhoods" element={<Neighborhoods />} />

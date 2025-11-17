@@ -157,6 +157,8 @@ const ImageKitUpload = ({
           style={{ display: "none" }}
           useUniqueFileName={true}
           folder="/properties"
+          multiple
+          accept="image/*"
         />
 
         {images.length > 0 && (

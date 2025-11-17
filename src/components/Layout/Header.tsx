@@ -7,6 +7,7 @@ import './Header.css';
 const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
   '/properties': 'Propriedades',
+  '/imoveis': 'Imóveis',
   '/leads': 'Leads',
   '/cities': 'Cidades',
   '/neighborhoods': 'Bairros',

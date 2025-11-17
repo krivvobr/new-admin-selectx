@@ -229,6 +229,7 @@ export default function Leads() {
             placeholder="https://..."
             value={formData.property_url}
             onChange={(e) => setFormData({ ...formData, property_url: e.target.value })}
+            disabled={!formData.property_id}
           />
 
           <div className="form-actions">
