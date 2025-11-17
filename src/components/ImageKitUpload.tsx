@@ -1,5 +1,5 @@
 import { Upload, X, Image as ImageIcon } from "lucide-react";
-import { IKContext, IKUpload } from "imagekitio-react";
+import { IKContext } from "imagekitio-react";
 import { useState, useRef } from "react";
 import "./ImageKitUpload.css";
 
@@ -51,30 +51,24 @@ const ImageKitUpload = ({
   onCoverImageChange,
 }: ImageKitUploadProps) => {
   const [uploading, setUploading] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
-    // O IKUpload cria um input dentro do container, então precisamos encontrar o input correto
-    const fileInput = containerRef.current?.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
-    }
+    inputRef.current?.click();
   };
 
-  const handleSuccess = (res: any) => {
-    const newUrl = res.url;
-    
-    // Adiciona a nova imagem à lista
-    const newImages = [...images, newUrl];
-    onImagesChange(newImages);
-
-    // Se não há imagem de capa, define a primeira como capa
-    if (!coverImage && onCoverImageChange) {
-      onCoverImageChange(newUrl);
+  const handleSuccess = (urls: string[]) => {
+    const availableSlots = Math.max(0, maxImages - images.length);
+    const toAdd = urls.slice(0, availableSlots);
+    if (toAdd.length === 0) {
+      setUploading(false);
+      return;
     }
-
+    const newImages = [...images, ...toAdd];
+    onImagesChange(newImages);
+    if (!coverImage && onCoverImageChange) {
+      onCoverImageChange(toAdd[0]);
+    }
     setUploading(false);
   };
 
@@ -82,6 +76,54 @@ const ImageKitUpload = ({
     console.error("Erro no upload:", error);
     alert(`Erro ao fazer upload da imagem: ${error.message}`);
     setUploading(false);
+  };
+
+  const uploadFile = async (file: File) => {
+    const { signature, expire, token } = await authenticator();
+    const form = new FormData();
+    form.append("file", file);
+    form.append("fileName", file.name);
+    form.append("folder", "/properties");
+    form.append("useUniqueFileName", "true");
+    form.append("publicKey", publicKey);
+    form.append("signature", signature);
+    form.append("token", token);
+    form.append("expire", String(expire));
+    const res = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+      method: "POST",
+      body: form,
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Falha no upload");
+    }
+    const data = await res.json();
+    return data?.url as string;
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const availableSlots = Math.max(0, maxImages - images.length);
+    const selected = Array.from(files).slice(0, availableSlots);
+    if (selected.length === 0) return;
+    try {
+      setUploading(true);
+      const results = await Promise.allSettled(selected.map(uploadFile));
+      const urls = results
+        .filter((r) => r.status === "fulfilled")
+        .map((r) => (r as PromiseFulfilledResult<string>).value)
+        .filter(Boolean);
+      if (urls.length > 0) {
+        handleSuccess(urls);
+      } else {
+        throw new Error("Nenhuma imagem enviada");
+      }
+    } catch (err: any) {
+      handleError(err);
+    } finally {
+      if (inputRef.current) inputRef.current.value = "";
+    }
   };
 
   const handleRemoveImage = (index: number) => {
@@ -114,12 +156,8 @@ const ImageKitUpload = ({
   }
 
   return (
-    <div className="imagekit-upload-container" ref={containerRef}>
-      <IKContext
-        publicKey={publicKey}
-        urlEndpoint={urlEndpoint}
-        authenticator={authenticator}
-      >
+    <div className="imagekit-upload-container">
+      <IKContext publicKey={publicKey} urlEndpoint={urlEndpoint} authenticator={authenticator}>
         {canUpload && (
           <div
             className="imagekit-upload-area"
@@ -150,15 +188,13 @@ const ImageKitUpload = ({
           </div>
         )}
 
-        <IKUpload
-          onSuccess={handleSuccess}
-          onError={handleError}
-          onUploadStart={() => setUploading(true)}
-          style={{ display: "none" }}
-          useUniqueFileName={true}
-          folder="/properties"
+        <input
+          ref={inputRef}
+          type="file"
           multiple
           accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleInputChange}
         />
 
         {images.length > 0 && (
