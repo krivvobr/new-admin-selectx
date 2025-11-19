@@ -12,6 +12,7 @@ const pageTitles: Record<string, string> = {
   '/cities': 'Cidades',
   '/neighborhoods': 'Bairros',
   '/profiles': 'Usuários',
+  '/banners': 'Banners',
 };
 
 export default function Header() {

@@ -66,3 +66,12 @@ export interface Neighborhood {
   created_at?: string;
 }
 
+export interface Banner {
+  id: string;
+  title: string;
+  desktop_images: string[];
+  mobile_image?: string;
+  active?: boolean;
+  created_at?: string;
+}
+

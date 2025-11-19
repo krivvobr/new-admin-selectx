@@ -5,6 +5,7 @@ import {
   Users,
   MapPin,
   Building2,
+  Image,
 
 } from 'lucide-react';
 import './Sidebar.css';
@@ -15,6 +16,7 @@ const menuItems = [
   { path: '/leads', label: 'Leads', icon: Users },
   { path: '/cities', label: 'Cidades', icon: Building2 },
   { path: '/neighborhoods', label: 'Bairros', icon: MapPin },
+  { path: '/banners', label: 'Banners', icon: Image },
   // { path: '/profiles', label: 'Usuários', icon: User },
 ];
 

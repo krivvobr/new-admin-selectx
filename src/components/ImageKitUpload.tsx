@@ -40,6 +40,7 @@ interface ImageKitUploadProps {
   maxImages?: number;
   coverImage?: string;
   onCoverImageChange?: (url: string) => void;
+  folder?: string;
 }
 
 const ImageKitUpload = ({
@@ -49,6 +50,7 @@ const ImageKitUpload = ({
   maxImages = 20,
   coverImage,
   onCoverImageChange,
+  folder = "/properties",
 }: ImageKitUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -83,7 +85,7 @@ const ImageKitUpload = ({
     const form = new FormData();
     form.append("file", file);
     form.append("fileName", file.name);
-    form.append("folder", "/properties");
+    form.append("folder", folder);
     form.append("useUniqueFileName", "true");
     form.append("publicKey", publicKey);
     form.append("signature", signature);
@@ -184,7 +186,7 @@ const ImageKitUpload = ({
 
         {!canUpload && (
           <div className="imagekit-upload-limit">
-            <p>Limite de {maxImages} imagens atingido</p>
+            <p>{maxImages === 1 ? 'Imagem única selecionada' : `Limite de ${maxImages} imagens atingido`}</p>
           </div>
         )}
 

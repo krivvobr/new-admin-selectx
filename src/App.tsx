@@ -10,6 +10,7 @@ import Leads from './pages/Leads';
 import Cities from './pages/Cities';
 import Neighborhoods from './pages/Neighborhoods';
 import Profiles from './pages/Profiles';
+import Banners from './pages/Banners';
 import './App.css';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               <Route path="cities" element={<Cities />} />
               <Route path="neighborhoods" element={<Neighborhoods />} />
               <Route path="profiles" element={<Profiles />} />
+              <Route path="banners" element={<Banners />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
